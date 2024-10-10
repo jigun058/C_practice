@@ -114,7 +114,64 @@ int eval(char expr[])
 	return pop(&S);
 }
 
+int 연산자 우선순위(char op)
+{
+	case 괄호
+		1
+	case + | -
+		2
+	case * | /
+		3
+}
+
+void infixToPostfix(char expr[])
+{
+	StackType S;
+	init(&S);
+
+	char c, op;
+	int n = strlen(expr);
+
+	for(int i = 0; i<n; i++)
+	{
+		c = expr[i];
+		if(C >= '0' && C <= '9')
+			printf("%c ", c);
+		else if(c == '(')
+			push(&S, c);
+		else if(c == ')')
+		{
+			op = pop(&S);
+			while(op != '(')
+			{
+				printf("%c ", op);
+				op = pop(&S);
+			}
+		}
+		else if(c == '+' || c == '-' || c == '*' || c == '/')
+		{
+			while(!isEmpty(&S))
+			{
+				op = peek(&S);
+				if( /*연산자 우선순위(c) <= 연산자 우선순위(op)*/ )
+					//pop & print
+				else
+					break;
+			}
+			push(c);
+		}
+	}
+
+	//while(!isEmpty(&S))
+		//pop & print
+}
+
 int main()
 {
+	char str[N];
+	fgets(str, N, stdin);
 
+	infixToPostfix(str);
+
+	return 0;
 }
