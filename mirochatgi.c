@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <windows.h>
+//#include <unistd.h>
 
 #define N 100
 #define M 6
