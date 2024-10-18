@@ -1,27 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
+#include <unistd.h> //macos에서 windows.h 대신 사용하는 헤더
 
 #define N 100
 #define M 6
 
-char map[M][M] = {
-    {'1','1','1','1','1','1'},
-    {'0','0','1','0','0','1'},
-    {'1','0','0','0','1','1'},
-    {'1','0','1','0','1','1'},
-    {'1','0','1','0','0','x'},
-    {'1','1','1','1','1','1'}
-};
-
 // char map[M][M] = {
 //     {'1','1','1','1','1','1'},
-//     {'0','0','0','0','0','1'},
+//     {'0','0','1','0','0','1'},
+//     {'1','0','0','0','1','1'},
 //     {'1','0','1','0','1','1'},
-//     {'1','1','1','0','0','x'},
-//     {'1','1','1','0','1','1'},
+//     {'1','0','1','0','0','x'},
 //     {'1','1','1','1','1','1'}
 // };
+
+char map[M][M] = {
+    {'1','1','1','1','1','1'},
+    {'0','0','0','0','0','1'},
+    {'1','0','1','0','1','1'},
+    {'1','1','1','0','0','x'},
+    {'1','1','1','0','1','1'},
+    {'1','1','1','1','1','1'}
+};
 
 typedef struct
 {
@@ -66,7 +66,6 @@ void addRear(Deque *S, element e)
     if (isFull(S))
     {
         printf("오버플로우\n");
-        return;
     }
     S->data[S->rear] = e;
     S->rear = (S->rear + 1) % N;
@@ -78,7 +77,6 @@ element deleteFront(Deque *S)
     if (isEmpty(S))
     {
         printf("언더플로우\n");
-        return;
     }
     element temp = S->data[S->front];
     S->front = (S->front + 1) % N;
@@ -91,7 +89,6 @@ element deleteRear(Deque *S)
     if (isEmpty(S))
     {
         printf("언더플로우\n");
-        return;
     }
     S->rear = (S->rear - 1 + N) % N;
     return S->data[S->rear];
@@ -123,10 +120,10 @@ void printMap(char map[M][M], element here) {
         printf("\n");
     }
     printf("\n");
-    Sleep(500);  // 0.5초 지연
+    usleep(500000);  // 0.5초 지연
 }
 
-int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};  // 상, 하, 좌, 우 순서 -> 스택에 집어넣는 순서이므로, pop을 통한 실제 이동은 반대 순서가 됨.
+int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};  // 상, 하, 좌, 우 순서 -> DFS에서는 스택에 집어넣는 순서이므로, pop을 통한 실제 이동은 반대 순서가 됨.
 
 // 스택을 이용한 DFS(덱의 Rear을 top으로 간주)
 void DFS(Deque *S, int startRow, int startCol)
@@ -223,9 +220,9 @@ int main()
     int startCol = 0;
 
     //둘 중 하나 선택
-    DFS(&D, startRow, startCol);
-    //BFS(&D, startRow, startCol);
-    Sleep(5000);  // 5초 지연
+    //DFS(&D, startRow, startCol);
+    BFS(&D, startRow, startCol);
 
+    usleep(5000000);  // 5초 지연 후 종료
     return 0;
 }
