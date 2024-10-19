@@ -46,19 +46,11 @@ int rCountChar(char str[], char c, int i) {
         return cnt;
     }
     else{
-        return cnt + rCountChat(str, c, i-1);
+        return cnt + rCountChar(str, c, i-1);
     }
 }
-
-void hanoi_tower(int n, char from, char tmp, char to){
-    if (n == 1){
-        printf("원판 1: %c --> %c\n")
-    }
-}
-
 
 int main() {
-
     int n;
     scanf("%d", &n);
     int* arr = (int*)malloc(sizeof(int) * n);
