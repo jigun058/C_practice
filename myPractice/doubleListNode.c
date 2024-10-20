@@ -3,47 +3,55 @@
 
 typedef char Element;
 
-typedef struct simpNode{
+typedef struct DNode{
+    struct DNode* prev;
+    struct DNode* next;
     Element data;
-    struct simpNode* next;
-}SimpNode;
+}DNode;
 
 typedef struct List{
-    SimpNode* head;
+    DNode* head;
+    DNode* tail;
     int size;
 }List;
 
-SimpNode* makeNode(Element e){
-    SimpNode* node = (SimpNode*)malloc(sizeof(SimpNode));
+DNode* makeNode(Element e){
+    DNode* node = (DNode*)malloc(sizeof(DNode));
     node->data = e;
     node->next = NULL;
+    node->prev = NULL;
+
     return node;
 }
 
-void initList(List* L){
+void init(List* L){
+    L->head = makeNode('\0');
+    L->tail = makeNode('\0');
+
+    L->head->next = L->tail;
+    L->tail->prev = L->head;
     L->size = 0;
-    L->head = (SimpNode*)malloc(sizeof(SimpNode));
-    L->head->next = NULL;
 }
 
 int isEmpty(List* L){
-    return L->head->next == NULL;
+    return L->size == 0;
 }
 
 int insert(List* L, int pos, Element e){
     if(L->size < pos){
-        printf("%d이하의 pos를 입력하세요.\n", L->size);
+        printf("%d 이하의 pos를 입력하세요.\n", L->size);
         return -1;
     }
-    
-    SimpNode* node = makeNode(e);
 
-    SimpNode* p = L->head;
+    DNode* node = makeNode(e);
+    DNode* p = L->head;
     for(int i=0; i<pos; i++){
         p = p->next;
     }
 
     node->next = p->next;
+    node->prev = p;
+    p->next->prev = node;
     p->next = node;
 
     L->size += 1;
@@ -57,21 +65,20 @@ Element delete(List* L, int pos){
     }
 
     if(L->size <= pos){
-        printf("%d미만의 pos를 입력하세요.\n", L->size);
+        printf("%d 미만의 pos를 입력하세요.\n", L->size);
         return -1;
     }
-
-    SimpNode* p = L->head;
-    for(int i=0; i<pos; i++){
+    
+    DNode* p = L->head;
+    for(int i=0; i<=pos; i++){
         p = p->next;
     }
+    Element temp = p->data;
 
-    SimpNode* nodeToDel = p->next;
-    Element temp = p->next->data;
+    p->next->prev = p->prev;
+    p->prev->next = p->next;
 
-    p->next = p->next->next;
-
-    free(nodeToDel);
+    free(p);
     L->size -= 1;
     return temp;
 }
@@ -83,25 +90,24 @@ Element getEntry(List* L, int pos){
     }
 
     if(L->size <= pos){
-        printf("%d미만의 pos를 입력하세요.\n", L->size);
+        printf("%d 미만의 pos를 입력하세요.\n", L->size);
         return -1;
     }
 
-    SimpNode* p = L->head;
-
-    for(int i=0; i<pos; i++){
+    DNode* p = L->head;
+    for(int i=0; i<=pos; i++){
         p = p->next;
     }
 
-    return p->next->data;
+    return p->data;
 }
 
 int main() {
     List L;
     List L1;
 
-    initList(&L);
-    initList(&L1);
+    init(&L);
+    init(&L1);
 
     insert(&L, 0, 'A');
     insert(&L, 1, 'B');
@@ -118,6 +124,7 @@ int main() {
     printf("%c\n", getEntry(&L, 4));
     printf("%c\n", delete(&L, 3));
     printf("%c\n", delete(&L, 3)); 
+
 
     return 0;
 }
