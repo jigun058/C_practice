@@ -113,6 +113,18 @@ Element getEntry(CircList* C, int pos){
     return p->next->data;
 }
 
+void printList(CircList* L){
+    SimpNode* p = L->tail->next->next;
+
+    while(p != L->tail->next){
+        printf("[%c] => ", p->data);
+        p = p->next;
+    }
+    prinf("[%c] => ", p->data);
+
+    printf("\b\b\b     \n");
+}
+
 int main() {
     CircList L;
     CircList L1;
