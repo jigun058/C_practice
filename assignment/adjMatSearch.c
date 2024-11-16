@@ -5,12 +5,120 @@
 #define TRUE 1
 #define FALSE 0
 
+//////////////////////스택과 큐//////////////////////
+typedef struct SimpNode{
+    struct SimpNode* next;
+    int data;
+}SimpNode;
+
+typedef struct Stack{
+    SimpNode* top;
+}Stack;
+
+typedef struct Queue{
+    SimpNode* rear;
+}Queue;
+
+void initStack(Stack* S){
+    S->top = NULL;
+}
+
+void initQueue(Queue* Q){
+    Q->rear = NULL;
+}
+
+int isStackEmpty(Stack* S){
+    return S->top == NULL;
+}
+
+int isQueueEmpty(Queue* Q){
+    return Q->rear == NULL;
+}
+
+void push(Stack* S, int e){
+    SimpNode* node = (SimpNode*)malloc(sizeof(SimpNode));
+    node->data = e;
+    node->next = S->top;
+    S->top = node;
+}
+
+void enqueue(Queue* Q, int e){
+    SimpNode* node = (SimpNode*)malloc(sizeof(SimpNode));
+    node->data = e;
+
+    if(isQueueEmpty(Q)){
+        node->next = node;
+        Q->rear = node;
+    }
+
+    else{
+
+        node->next = Q->rear->next;
+        Q->rear->next = node;
+        Q->rear = node;
+    }
+}
+
+int pop(Stack* S){
+    if(isStackEmpty(S)){
+        printf("Underflow\n");
+        return -1;
+    }
+
+    SimpNode* node = S->top;
+    int temp = node->data;
+
+    S->top = node->next;
+
+    free(node);
+
+    return temp;
+}
+
+int dequeue(Queue* Q){
+    if(isQueueEmpty(Q)){
+        printf("Underflow\n");
+        return -1;
+    }
+
+    SimpNode* node = Q->rear->next;
+    int temp = node->data;
+
+    if(Q->rear == node){
+        Q->rear = NULL;
+    }
+    else{
+        Q->rear->next = node->next;
+    }
+
+    free(node);
+    return temp;
+}
+
+int peek(Stack* S){
+    if(isStackEmpty(S)){
+        printf("Underflow\n");
+        return -1;
+    }
+
+    return S->top->data;
+}
+
+int peekFront(Queue* Q){
+    if(isQueueEmpty(Q)){
+            printf("Underflow\n");
+            return -1;
+        }
+
+    return Q->rear->next->data;
+}
+///////////////////////////////////////////////////////
+
 char vName[N] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' , 'J'};
 int visited[N];
 
 typedef struct {
     int vSize;
-
     int adjMat[N][N];
 }GrapeType;
 
@@ -55,15 +163,26 @@ void print(GrapeType* G){
     }
 }
 
-void rDFS(GrapeType* G, int s){
+// void rDFS(GrapeType* G, int s){
+//     visited[s] = TRUE;
+//     printf("[%c] ", vName[s]);
+
+//     for(int t = 0 ; t < G->vSize ; t++){
+//         if(G->adjMat[s][t] == 1 && visited[t] == FALSE){
+//             rDFS(G, t);
+//         }
+//     }
+// }
+
+void DFS(GrapeType* G, int s){
     visited[s] = TRUE;
     printf("[%c] ", vName[s]);
 
-    for(int t = 0 ; t < G->vSize ; t++){
-        if(G->adjMat[s][t] == 1 && visited[t] == FALSE){
-            rDFS(G, t);
-        }
-    }
+}
+
+void BFS(GrapeType* G, int s){
+    visited[s] = TRUE;
+    printf("[%c] ", vName[s]);
 }
 
 int main(){
@@ -91,7 +210,8 @@ int main(){
     printf("\n");
 
 
-    printf("DFS : "); rDFS(&G, 0);
+    printf("DFS : "); DFS(&G, 0);
+    printf("BFS : "); BFS(&G, 0);
 
     return 0;
 }
