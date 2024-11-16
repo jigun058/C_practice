@@ -100,6 +100,7 @@ void rDFS(GraphType* G, char vName){
 }
 
 int main(){
+    
     GraphType G;
     initGraph(&G);
 
@@ -120,9 +121,3 @@ int main(){
 
     return 0;
 }
-//과제 adj - matrix, list 구현 + 각각의 rDFS(재귀) 했었죠?
-//adj matrix와 list는 수업시간에 만든거 그대로!!! 바꾸지말고!!!!!
-//BFS(+ 원형 queue)도 추가. 원형큐는 이전것에서 typedef만 바꾸면 될 듯
-//DFS(stack)도 추가. 이론상 정확하게 stack에서 빠져나오지 않게 하기.
-//결과 캡쳐화면, 소스코드는 안 돌려봄. 보고서 형태로
-//일요일 자정까지
