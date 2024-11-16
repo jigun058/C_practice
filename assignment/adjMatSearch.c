@@ -115,14 +115,14 @@ int peekFront(Queue* Q){
 ///////////////////////////////////////////////////////
 
 char vName[N] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' , 'J'};
-int visited[N];
+int isVisit[N];
 
 typedef struct {
     int vSize;
     int adjMat[N][N];
-}GrapeType;
+}GraphType;
 
-void initGraph(GrapeType* G){
+void initGraph(GraphType* G){
     G->vSize = 0;
     for(int i = 0 ; i < N; i++){
         for(int j = 0 ; j < N ; j++){
@@ -131,17 +131,17 @@ void initGraph(GrapeType* G){
     }
 }
 
-void setVertexCount(GrapeType* G, int n){
+void setVertexCount(GraphType* G, int n){
     G->vSize = n;
 }
 
-void insertEdge(GrapeType* G, int u, int v){
+void insertEdge(GraphType* G, int u, int v){
     if(u < G->vSize && v < G->vSize){
         G->adjMat[u][v] = G->adjMat[v][u] = 1;
     }
 }
 
-int degree(GrapeType* G, int v){
+int degree(GraphType* G, int v){
     int count = 0;
     for(int i = 0 ; i < G->vSize ; i++){
         if(G->adjMat[v][i] == 1){
@@ -152,7 +152,23 @@ int degree(GrapeType* G, int v){
     return count;
 }
 
-void print(GrapeType* G){
+// 현재 지점에서 탐색 가능한 인접 정점이 두 개 이상인 경우는 peek, 한 개 이하인 경우는 pop을 통해 다음 지점 반환
+int peekOrPop(GraphType* G, Stack* S){
+    int s = peek(S);
+
+    int count = 0;
+    for(int i=0; i<(G->vSize); i++){
+        if(G->adjMat[s][i] == 1 && !isVisit[i])
+            count += 1;
+    }
+
+    if(count >= 2)
+        return peek(S);
+    else
+        return pop(S);
+}
+
+void print(GraphType* G){
     for(int i = 0 ; i < G->vSize ; i++){
         printf(" %c(%d) | ", vName[i], degree(G, i));
         for(int j = 0 ; j < G->vSize ; j++){
@@ -163,31 +179,45 @@ void print(GrapeType* G){
     }
 }
 
-// void rDFS(GrapeType* G, int s){
-//     visited[s] = TRUE;
+// void rDFS(GraphType* G, int s){
+//     isVisit[s] = TRUE;
 //     printf("[%c] ", vName[s]);
 
 //     for(int t = 0 ; t < G->vSize ; t++){
-//         if(G->adjMat[s][t] == 1 && visited[t] == FALSE){
+//         if(G->adjMat[s][t] == 1 && isVisit[t] == FALSE){
 //             rDFS(G, t);
 //         }
 //     }
 // }
 
-void DFS(GrapeType* G, int s){
-    visited[s] = TRUE;
-    printf("[%c] ", vName[s]);
+void DFS(GraphType* G, int s){
+    Stack S;
+    initStack(&S);
+    push(&S, s);
 
+    while(!isStackEmpty(&S)){
+        int here = peekOrPop(G, &S);
+
+        if(isVisit[here] == FALSE){
+            isVisit[here] = TRUE;
+            printf("[%c] ", vName[here]);
+        }
+
+        for(int j = (G->vSize)-1; j >= 0; j--){   //stack은 LIFO방식이므로 우선순위가 낮은 지점부터 투입
+            if(G->adjMat[here][j] == 1 && !isVisit[j])
+                push(&S, j);
+        }
+    }
 }
 
-void BFS(GrapeType* G, int s){
-    visited[s] = TRUE;
+void BFS(GraphType* G, int s){
+    isVisit[s] = TRUE;
     printf("[%c] ", vName[s]);
 }
 
 int main(){
     
-    GrapeType G;
+    GraphType G;
     initGraph(&G);
 
     int n;
@@ -211,7 +241,7 @@ int main(){
 
 
     printf("DFS : "); DFS(&G, 0);
-    printf("BFS : "); BFS(&G, 0);
+    //printf("BFS : "); BFS(&G, 0);
 
     return 0;
 }

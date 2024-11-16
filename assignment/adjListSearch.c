@@ -120,7 +120,7 @@ typedef struct AdjVertex{
 
 typedef struct Vertex{
     char vName;
-    int isVisited;
+    int isVisit;
     AdjVertex* aHead;
     struct Vertex* next;
 }Vertex;
@@ -136,7 +136,7 @@ void initGraph(GraphType* G){
 void makeVertex(GraphType* G, char vName){
     Vertex* v = (Vertex*)malloc(sizeof(Vertex));
     v->vName = vName;
-    v->isVisited = FALSE;
+    v->isVisit = FALSE;
     v->aHead = NULL;
     v->next = NULL;
 
@@ -196,14 +196,14 @@ void print(GraphType* G){
 void DFS(GraphType* G, char vName){
     Vertex* v = findVertex(G, vName);
     AdjVertex* a = NULL;
-    if(v->isVisited == FALSE){
-        v->isVisited = TRUE;
+    if(v->isVisit == FALSE){
+        v->isVisit = TRUE;
         printf("[%c] ", v->vName);
     }
 
     for(a = v->aHead; a != NULL; a = a->next){
         v = findVertex(G, a->aName);
-        if(v->isVisited == FALSE)
+        if(v->isVisit == FALSE)
             rDFS(G, v->vName);
     }
 }
@@ -211,14 +211,14 @@ void DFS(GraphType* G, char vName){
 void BFS(GraphType* G, char vName){
     Vertex* v = findVertex(G, vName);
     AdjVertex* a = NULL;
-    if(v->isVisited == FALSE){
-        v->isVisited = TRUE;
+    if(v->isVisit == FALSE){
+        v->isVisit = TRUE;
         printf("[%c] ", v->vName);
     }
 
     for(a = v->aHead; a != NULL; a = a->next){
         v = findVertex(G, a->aName);
-        if(v->isVisited == FALSE)
+        if(v->isVisit == FALSE)
             rDFS(G, v->vName);
     }
 }
