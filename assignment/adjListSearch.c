@@ -7,7 +7,7 @@
 //////////////////////스택과 큐//////////////////////
 typedef struct SimpNode{
     struct SimpNode* next;
-    int data;
+    char data;
 }SimpNode;
 
 typedef struct Stack{
@@ -58,7 +58,7 @@ void enqueue(Queue* Q, int e){
     }
 }
 
-int pop(Stack* S){
+char pop(Stack* S){
     if(isStackEmpty(S)){
         printf("Underflow\n");
         return -1;
@@ -74,7 +74,7 @@ int pop(Stack* S){
     return temp;
 }
 
-int dequeue(Queue* Q){
+char dequeue(Queue* Q){
     if(isQueueEmpty(Q)){
         printf("Underflow\n");
         return -1;
@@ -94,7 +94,7 @@ int dequeue(Queue* Q){
     return temp;
 }
 
-int peek(Stack* S){
+char peek(Stack* S){
     if(isStackEmpty(S)){
         printf("Underflow\n");
         return -1;
@@ -103,7 +103,7 @@ int peek(Stack* S){
     return S->top->data;
 }
 
-int peekFront(Queue* Q){
+char peekFront(Queue* Q){
     if(isQueueEmpty(Q)){
             printf("Underflow\n");
             return -1;
@@ -184,6 +184,24 @@ void insertEdge(GraphType* G, char v1, char v2){
     makeAdjVertex(v, v1);
 }
 
+// 현재 지점에서 탐색 가능한 인접 정점이 두 개 이상인 경우는 peek, 한 개 이하인 경우는 pop을 통해 다음 지점 반환
+char peekOrPop(GraphType* G, Stack* S){
+    char s = peek(S);
+    Vertex* p = findVertex(G, s);
+
+    int count = 0;
+    for(AdjVertex* a = p->aHead; a != NULL; a = a->next){
+        Vertex* b = findVertex(G, a->aName);
+        if(!(b->isVisit))
+            count += 1;
+    }
+
+    if(count >= 2)
+        return peek(S);
+    else
+        return pop(S);
+}
+
 void print(GraphType* G){
     for(Vertex* p = G->vHead; p != NULL; p = p->next){
         printf("[%c] : ", p->vName);
@@ -193,33 +211,60 @@ void print(GraphType* G){
     }
 }
 
-void DFS(GraphType* G, char vName){
-    Vertex* v = findVertex(G, vName);
-    AdjVertex* a = NULL;
-    if(v->isVisit == FALSE){
-        v->isVisit = TRUE;
-        printf("[%c] ", v->vName);
-    }
+void DFS(GraphType* G, char s){
+    Stack S;
+    initStack(&S);
+    push(&S, s);
 
-    for(a = v->aHead; a != NULL; a = a->next){
-        v = findVertex(G, a->aName);
-        if(v->isVisit == FALSE)
-            rDFS(G, v->vName);
+    // 임시 스택
+    Stack Temp;
+    initStack(&Temp);
+
+    while(!isStackEmpty(&S)){
+        char here = peekOrPop(G, &S);
+
+        Vertex* p = findVertex(G, here);
+
+        if(p->isVisit == FALSE){
+            p->isVisit = TRUE;
+            printf("[%c] ", p->vName);
+        }
+
+        // stack은 LIFO방식이므로 우선순위가 낮은 지점부터 투입해야 하는데, AdjVertex는 우선순위가 높은 지점부터 저장되는 단순연결(단방향)형태이므로 Temp 스택을 사용해 S 스택에 저장
+        for(AdjVertex* a = p->aHead; a != NULL; a = a->next){
+            Vertex* b = findVertex(G, a->aName);
+            if(!(b->isVisit))
+                push(&Temp, a->aName);
+        }
+        while(!isStackEmpty(&Temp))
+            push(&S, pop(&Temp));
     }
 }
 
-void BFS(GraphType* G, char vName){
-    Vertex* v = findVertex(G, vName);
-    AdjVertex* a = NULL;
-    if(v->isVisit == FALSE){
-        v->isVisit = TRUE;
-        printf("[%c] ", v->vName);
-    }
+void BFS(GraphType* G, char s){
+    // BFS는 DFS를 실행한 후 바로 실행할 것이므로 isVisit 초기화
+    for(Vertex* p = G->vHead; p != NULL; p = p->next)
+        p->isVisit = 0;
 
-    for(a = v->aHead; a != NULL; a = a->next){
-        v = findVertex(G, a->aName);
-        if(v->isVisit == FALSE)
-            rDFS(G, v->vName);
+    Queue Q;
+    initQueue(&Q);
+    enqueue(&Q, s);
+
+    while(!isQueueEmpty(&Q)){
+        char here = dequeue(&Q);
+
+        Vertex* p = findVertex(G, here);
+
+        if(p->isVisit == FALSE){
+            p->isVisit = TRUE;
+            printf("[%c] ", p->vName);
+        }
+
+        for(AdjVertex* a = p->aHead; a != NULL; a = a->next){
+            Vertex* b = findVertex(G, a->aName);
+            if(!(b->isVisit))
+                enqueue(&Q, a->aName);
+        }
     }
 }
 
@@ -241,8 +286,8 @@ int main(){
 
     print(&G); printf("\n");
 
-    DFS(&G, 'B'); printf("\n");
-    BFS(&G, 'B'); printf("\n");
+    DFS(&G, 'A'); printf("\n");
+    BFS(&G, 'A'); printf("\n");
 
     return 0;
 }
