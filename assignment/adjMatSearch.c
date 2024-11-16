@@ -179,17 +179,6 @@ void print(GraphType* G){
     }
 }
 
-// void rDFS(GraphType* G, int s){
-//     isVisit[s] = TRUE;
-//     printf("[%c] ", vName[s]);
-
-//     for(int t = 0 ; t < G->vSize ; t++){
-//         if(G->adjMat[s][t] == 1 && isVisit[t] == FALSE){
-//             rDFS(G, t);
-//         }
-//     }
-// }
-
 void DFS(GraphType* G, int s){
     Stack S;
     initStack(&S);
@@ -203,7 +192,8 @@ void DFS(GraphType* G, int s){
             printf("[%c] ", vName[here]);
         }
 
-        for(int j = (G->vSize)-1; j >= 0; j--){   //stack은 LIFO방식이므로 우선순위가 낮은 지점부터 투입
+        // stack은 LIFO방식이므로 우선순위가 낮은 지점부터 투입
+        for(int j = (G->vSize)-1; j >= 0; j--){
             if(G->adjMat[here][j] == 1 && !isVisit[j])
                 push(&S, j);
         }
@@ -211,8 +201,28 @@ void DFS(GraphType* G, int s){
 }
 
 void BFS(GraphType* G, int s){
-    isVisit[s] = TRUE;
-    printf("[%c] ", vName[s]);
+    // BFS는 DFS를 실행한 후 바로 실행할 것이므로 isVisit 초기화
+    for(int i=0; i < N; i++){
+        isVisit[i] = 0;
+    }
+
+    Queue Q;
+    initQueue(&Q);
+    enqueue(&Q, s);
+
+    while(!isQueueEmpty(&Q)){
+        int here = dequeue(&Q);
+
+        if(isVisit[here] == FALSE){
+            isVisit[here] = TRUE;
+            printf("[%c] ", vName[here]);
+        }
+
+        for(int j = 0; j < G->vSize ; j++){
+            if(G->adjMat[here][j] == 1 && !isVisit[j])
+                enqueue(&Q, j);
+        }
+    }
 }
 
 int main(){
@@ -240,8 +250,8 @@ int main(){
     printf("\n");
 
 
-    printf("DFS : "); DFS(&G, 0);
-    //printf("BFS : "); BFS(&G, 0);
+    printf("DFS : "); DFS(&G, 0); printf("\n");
+    printf("BFS : "); BFS(&G, 0); printf("\n");
 
     return 0;
 }
