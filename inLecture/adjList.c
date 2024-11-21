@@ -100,6 +100,7 @@ void rDFS(GraphType* G, char vName){
 }
 
 int main(){
+    
     GraphType G;
     initGraph(&G);
 
