@@ -1,16 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Code table[] = {
-    {'A', ".-"}, {'B', "-..."}, {'C', "-.-."}, {'D', "-.."},
-    {'E', "."}, {'F', "..-."}, {'G', "--."}, {'H', "...."},
-    {'I', ".."}, {'J', ".---"}, {'K', "-.-"}, {'L', ".-.."},
-    {'M', "--"}, {'N', "-."}, {'O', "---"}, {'P', ".--."},
-    {'Q', "--.-"}, {'R', ".-."}, {'S', "..."}, {'T', "-"},
-    {'U', "..-"}, {'V', "...-"}, {'W', ".--"}, {'X', "-..-"},
-    {'Y', "-.--"}, {'Z', "--.."}
-};
-
 typedef char Telement;
 
 typedef struct{
@@ -21,10 +11,6 @@ typedef struct{
 TreeNode* makeNode(Telement e, TreeNode* left, TreeNode* right){
 
 }
-
-
-
-
 
 int nodeCount(TreeNode* root){
     if(!root)
@@ -47,8 +33,6 @@ int leafNodeCount(TreeNode* root){
             return leafNodeCount(root->left) + leafNodeCount();
     }
 }
-
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 int height(TreeNode* root){
     if(!root)

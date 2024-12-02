@@ -25,7 +25,7 @@ void buildHeap(int A[], int i, int n){
     }
 }
 
-void pringHeap(int A[], int n){
+void printHeap(int A[], int n){
     for(int i = 1; i < n; i++)
         printf("[%d] ", A[i]);
     printf("\n");
