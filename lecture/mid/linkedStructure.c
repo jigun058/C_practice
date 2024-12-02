@@ -49,7 +49,7 @@ element pop(StackType* S)
 void print(StackType *S)
 {
     for(StackNode* p = S->top; p != NULL; p = p->next)
-        printf("[%d] => ", )
+        printf("[%d] => ", );
 }
 
 int main()
