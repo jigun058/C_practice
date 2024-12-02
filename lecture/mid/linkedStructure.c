@@ -57,7 +57,7 @@ int main()
     StackType S;
     init(&S);
     
-    push
+    push();
 
     return 0;
 }

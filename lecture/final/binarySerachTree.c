@@ -136,7 +136,7 @@ TreeNode* deleteNode(TreeNode* root, element key){
         else{
             TreeNode* tmp = successor(root->right);
             root->key = tmp->key;
-            root->right = deleteNode(root)
+            root->right = deleteNode(root);
         }
     }
 
