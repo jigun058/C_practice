@@ -27,3 +27,5 @@ elif a == "2":
     y, r, d, a = map(int, input().split())
 
     print(y, "년 뒤 자산 : ", int(yearsLater(y, r, d, a)), "원")
+
+    

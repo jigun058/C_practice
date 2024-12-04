@@ -134,13 +134,46 @@ TreeNode* deleteNode(TreeNode* root, element key){
             return tmp;
         }
         else{
-            TreeNode* tmp = successor(root->right);
+            TreeNode* tmp = successor(root);
             root->key = tmp->key;
             root->right = deleteNode(root);
         }
     }
-
     return root;
+}
+
+TreeNode* deleteNodeIter(TreeNode* root, element key)    //삭제 연산   11.7 작 성 
+{
+   TreeNode *x, *y;
+   TreeNode *z = searchNode(root, key);
+   
+   // z를 이용해 y찾기  
+   if(z->left == NULL || z->right == NULL)
+      y = z;
+   else
+      y = successor(z);
+   
+   // 2. x 찾기  
+   if(y->left != NULL)  //y의 왼쪽 자식이 없다면... 
+      x = y->left; // y를 살려야하니까 x는 y의 왼쪽 자식이 됨.
+   else
+      x = y->right; 
+   
+   //3. x 기준 자신의 할부지의 위치에 따라 케이스를 나눠서 삭제함. 
+   if(x != NULL)
+      x->parent = y->parent;    // (x기준) 내 부모가 없어지니까 내 부모의 부모(할부지)랑 연결되는거임. 
+   
+   if(y->parent == NULL)  // (x기준) 내 부모가 루트노드라면.. 
+      root = x;
+   else if(y == y->parent->left) // (x기준) 내부모가 할부지의 왼쪽 자식이라면.. 
+      y->parent->left = x;
+   else                    // (x기준) 내부모가 할부지의 오른쪽  자식이라면.. 
+      y->parent->right = x; 
+   
+   //4. 왼쪽, 오른쪽 자식을 모두 갖는 노드의 삭제 => 해당 노드를 후계자 노드의 키값으로 바꾼다. 
+   if(y != z)       //case 3임.
+      z->key = y->key; 
+   return root;
 }
 
 int main(){
@@ -155,10 +188,10 @@ int main(){
     printf("\n");
 
     //(searchNode(root, 22) != NULL) ? printf("Found\n") : printf("Not Found\n");
-    printf("%d\n", successor(searchNode(root, 22)));
+    printf("%d\n", successor(searchNode(root, 18))->key);
 
-    //root = deleteNode(root, 30); preOrder(root); printf("\n");
-    //root = deleteNode(root, 26); preOrder(root); printf("\n");
+    root = deleteNode(root, 30); preOrder(root); printf("\n");
+    root = deleteNode(root, 26); preOrder(root); printf("\n");
 
     return 0;
 }
