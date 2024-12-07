@@ -3,15 +3,17 @@
 
 void heapify(int A[], int i, int n) {
     int max = i;
-    int left = 2 * i;
-    int right = 2 * i + 1;
+    int left = max*2;
+    int right = max*2 + 1;
 
-    if (left <= n && A[left] > A[max])
+    if(left <= n && A[max] < A[left]) {
         max = left;
-    if (right <= n && A[right] > A[max])
+    }
+    if(right <= n && A[max] < A[right]) {
         max = right;
+    }
 
-    if (max != i) {
+    if(max != i) {
         int tmp = A[i];
         A[i] = A[max];
         A[max] = tmp;
@@ -21,26 +23,28 @@ void heapify(int A[], int i, int n) {
 }
 
 void buildHeap(int A[], int n) {
-    for (int i = n / 2; i >= 1; i--) {
+    for(int i = n / 2; i >= 1; i--) {
         heapify(A, i, n);
     }
 }
 
-void printHeap(int A[], int n){
-    for(int i = 1; i <= n; i++)
+void printHeap(int A[], int n) {
+    for(int i = 1; i <= n; i++) {
         printf("[%d] ", A[i]);
+    }
     printf("\n");
 }
 
 void heapSort(int A[], int n) {
     buildHeap(A, n);
 
-    for (int i = n; i > 1; i--) {
-        int tmp = A[i];
-        A[i] = A[1];
-        A[1] = tmp;
+    for(int i = n; i > 1; i--) {
+        int tmp = A[1];
+        A[1] = A[i];
+        A[i] = tmp;
 
-        heapify(A, 1, i - 1);
+        heapify(A, 1, i-1);     //얘만 해도 되는데
+        //buildHeap(A, i-1);    //얘는 너무 비효율적
     }
 }
 

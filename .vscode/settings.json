@@ -3,6 +3,8 @@
         "stdio.h": "c",
         "algorithm": "c",
         "stdlib.h": "c",
-        "ios": "c"
+        "ios": "c",
+        "ostream": "c",
+        "print": "c"
     }
 }

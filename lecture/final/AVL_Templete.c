@@ -24,20 +24,36 @@ TreeNode* makeNode(element key)
     return node;
 }
 
-int height(TreeNode* root)
+int getHeight(TreeNode* root)
 {
     if(!root)
         return 0;
     else
-        return 1 + MAX(height(root->left), height(root->right));    
+        return 1 + MAX(getHeight(root->left), getHeight(root->right));    
 }
 
-int balance(TreeNode *root)
+int getBalance(TreeNode *root)
 {
     if(root == NULL)
         return 0;
         
-    return height(root->left) - height(root->right);    
+    return getHeight(root->left) - getHeight(root->right);    
+}
+
+TreeNode* rotateLeft(TreeNode* p) {
+    TreeNode* c = p->right;
+    p->right = c->left;
+    c->left = p;
+
+    return c;
+}
+
+TreeNode* rotateRight(TreeNode* p) {
+    TreeNode* c = p->left;
+    p->left = c->right;
+    c->right = p;
+
+    return c;
 }
 
 TreeNode* insertNode(TreeNode* root, element key)
@@ -49,6 +65,26 @@ TreeNode* insertNode(TreeNode* root, element key)
         root->left = insertNode(root->left, key);
     else if(key > root->key)
         root->right = insertNode(root->right, key);
+
+    int balance = getBalance(root);
+
+    if(balance < -1 && key > root->right->key) { //rr type -> RotateLeft (책에서는 rr회전)
+        return rotateLeft(root);
+    }
+
+    if(balance > 1 && key < root->left->key) { //ll type
+        return rotateRight(root);
+    }
+
+    if(balance <-1 && key < root->right->key) { // rl type
+        root->right = rotateRight(root->right);
+        return rotateLeft(root);
+    }
+
+    if(balance > 1 && key > root->left->key) { //lr type
+        root->left = rotateLeft(root->left);
+        return rotateRight(root);
+    }
     
     return root;    
 }
@@ -84,7 +120,7 @@ int main()
     }
 
     printf("\n");
-    printf("Balance Factor : %d\n", balance(root));
+    printf("Balance Factor : %d\n", getBalance(root));
 
     return 0;
 }

@@ -22,7 +22,7 @@ void init(HeapType* H)
 void upHeap(HeapType* H)
 {
     int i=H->heapSize;
-    element key=H->heap[i];
+    element key = H->heap[i];
     
     while((i!=1)&&(key>H->heap[i/2]))
     {
