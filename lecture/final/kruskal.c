@@ -215,7 +215,7 @@ void kruskal(GraphType* G, Edge* edges[]){
         e = edges[i];
 
         vNum1 = Find(e->v1 - 65);
-        vNum2 = Find(e->v1 - 65);
+        vNum2 = Find(e->v2 - 65);
 
         if(vNum1 != vNum2){
             printf("%d. [%c%c%d]", eCnt + 1, e->v1, e->v2, e->weight);
