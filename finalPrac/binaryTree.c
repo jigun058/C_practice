@@ -73,9 +73,18 @@ TreeNode* maxNode(TreeNode* root) {
     return root;
 }
 
-//주의 : deleteNode에서 양쪽 자식 모두 있을 때에만 사용할 것.
-TreeNode* successor(TreeNode* root) {
-    return minNode(root->right);
+TreeNode* successor(TreeNode* root){
+    TreeNode* x = root;
+    if(x->right != NULL)
+        return minNode(x->right);
+    
+    TreeNode* y = x->parent;
+    while(y != NULL && x == y->right){
+        x = y;
+        y = y->parent;
+    }
+
+    return y;
 }
 
 void preOrder(TreeNode* root) {
@@ -129,14 +138,10 @@ int main() {
     }
     printf("\n");
 
-    //(searchNode(root, 22) != NULL) ? printf("Found\n") : printf("Not Found\n");
     printf("%d\n", successor(searchNode(root, 26))->key);
 
     root = deleteNode(root, 30); preOrder(root); printf("\n");
     root = deleteNode(root, 26); preOrder(root); printf("\n");
 
     return 0;
-
 }
-
-

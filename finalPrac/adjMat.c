@@ -27,7 +27,7 @@ void setVertexCount(GraphType* G, int n) {
 void insertEdge(GraphType* G, int from, int to) {
     if(from < G->vSize && to < G->vSize) {
         G->adjMat[from][to] = 1;
-        G->adjMat[to][from] = 1;    //무방향 그래프
+        G->adjMat[to][from] = 1;
     }
 }
 
@@ -63,7 +63,6 @@ void rDFS(GraphType* G, int start) {
         if(G->adjMat[start][i] == 1 && isVisited[i] == 0)
             rDFS(G, i);
     }
-    
 }
 
 int main(){

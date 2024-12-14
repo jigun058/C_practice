@@ -43,8 +43,7 @@ void heapSort(int A[], int n) {
         A[1] = A[i];
         A[i] = tmp;
 
-        heapify(A, 1, i-1);     //얘만 해도 되는데
-        //buildHeap(A, i-1);    //얘는 너무 비효율적
+        heapify(A, 1, i-1);
     }
 }
 

@@ -79,7 +79,6 @@ void insertEdge(GraphType* G, char from, char to) {
     Vertex* p = findVertex(G, from);
     makeAdjVertex(p, to);
     
-    // 무방향 그래프
     Vertex* rp = findㅊVertex(G, to);
     makeAdjVertex(rp, from);
 }

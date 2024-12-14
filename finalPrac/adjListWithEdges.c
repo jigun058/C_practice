@@ -109,7 +109,7 @@ void insertEdge(GraphType* G, char from, char to, int weight) {
     e->v2 = to;
     e->weight = weight;
 
-    G->eCount += 1; //쓸데가 아직 없음
+    G->eCount += 1;
 
     Edge* ep = G->eHead;
 
@@ -126,7 +126,6 @@ void insertEdge(GraphType* G, char from, char to, int weight) {
     Vertex* p = findVertex(G, from);
     makeAdjVertex(p, to, e);
     
-    // 무방향 그래프
     Vertex* rp = findVertex(G, to);
     makeAdjVertex(rp, from, e);
 }
